@@ -3,7 +3,7 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-Adafruit_PWMServoDriver srituhobby = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver allservo = Adafruit_PWMServoDriver();
 DS3231  rtc(A4, A5);
 
 #define servoMIN 150
@@ -11,34 +11,47 @@ DS3231  rtc(A4, A5);
 
 void setup() {
   Serial.begin(9600);
-  srituhobby.begin();
+  allservo.begin();
   rtc.begin();
-  srituhobby.setPWMFreq(60);
+  allservo.setPWMFreq(60);
 
-  // set time
-  //  rtc.setDate(07, 4, 2018);
-  //  rtc.setTime(22, 00, 00);
-  //  rtc.setDOW(6);
+//  set time
+//  rtc.setDate(21, 11, 2022);
+//  rtc.setTime(00, 07, 00);
+//  rtc.setDOW(0);
 }
 
-void loop() {
-  for (int servo = 0; servo < 4; servo++ ) {
-    srituhobby.setPWM(servo, 0, servoMIN);
-    Serial.println(servo);
-    delay(300);
-  }
 
-  for (int servo = 3; servo >= 0; servo-- ) {
-    srituhobby.setPWM(servo, 0, servoMAX);
-    Serial.println(servo);
-    delay(300);
-  }
 
+void loop(){
+  if(rtc.getTimeStr() == "00:10:00") {
+    for (int servo = 0; servo < 16; servo++ ) {
+      allservo.setPWM(servo, 0, servoMIN);
+      Serial.println(servo);
+      delay(2000);
+      
+      Serial.print(rtc.getDOWStr());
+      Serial.print(" ");
+      Serial.print(rtc.getDateStr());
+      Serial.print(" -- ");
+      Serial.println(rtc.getTimeStr());
+    }
+  } if(rtc.getTimeStr() == "00.12.00"){
+    for (int servo = 0; servo < 16; servo++ ) {
+      allservo.setPWM(servo, 0, servoMAX);
+      Serial.println(servo);
+      delay(2000);
+
+      Serial.print(rtc.getDOWStr());
+      Serial.print(" ");
+      Serial.print(rtc.getDateStr());
+      Serial.print(" -- ");
+      Serial.println(rtc.getTimeStr());
+    }
+  }
   Serial.print(rtc.getDOWStr());
   Serial.print(" ");
-  
   Serial.print(rtc.getDateStr());
   Serial.print(" -- ");
-
   Serial.println(rtc.getTimeStr());
 }
